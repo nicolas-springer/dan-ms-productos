@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Categoria {
+  id        Int        @id @default(autoincrement())
+  nombre    String
+  productos Producto[] @relation("producto_categoria_fk")
+}
+
+model Proveedor {
+  id                 Int              @id @default(autoincrement())
+  nombre             String
+  mail               String
+  productos          Producto[]       @relation("producto_proveedor_fk")
+  ordenesDeProvision OrdenProvision[] @relation("orden_provision_proveedor_fk")
+}
+
+model Producto {
+  id                    Int                     @id @default(autoincrement())
+  nombre                String
+  descripcion           String
+  proveedor             Proveedor               @relation("producto_proveedor_fk", fields: [proveedorId], references: [id])
+  proveedorId           Int
+  stockActual           Int
+  categoria             Categoria               @relation("producto_categoria_fk", fields: [categoriaId], references: [id])
+  categoriaId           Int
+  OrdenProvisionDetalle OrdenProvisionDetalle[] @relation("orden_provision_detalle_producto_fk")
+}
+
+model OrdenProvision {
+  id              Int                     @id @default(autoincrement())
+  fechaGeneracion DateTime                @default(now())
+  fechaRecepcion  DateTime
+  esCancelada     Boolean                 @default(false)
+  proveedor       Proveedor               @relation("orden_provision_proveedor_fk", fields: [proveedorId], references: [id])
+  proveedorId     Int
+  detalles        OrdenProvisionDetalle[] @relation("orden_provision_detalle_orden_provision__fk")
+}
+
+model OrdenProvisionDetalle {
+  id               Int            @id @default(autoincrement())
+  ordenProvision   OrdenProvision @relation("orden_provision_detalle_orden_provision__fk", fields: [ordenProvisionId], references: [id])
+  ordenProvisionId Int
+  cantidad         Int
+  producto         Producto       @relation("orden_provision_detalle_producto_fk", fields: [productoId], references: [id])
+  productoId       Int
+  precio           Float
+}
