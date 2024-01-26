@@ -1,7 +1,7 @@
 {
   "name": "dan-ms-productos",
   "version": "1.0.0",
-  "description": "",
+  "description": "Este repositorio es el código inicial para el trabajo práctico 2 de la materia desarrollo de aplicaciones en la nube de la universidad tecnológica nacional facultad regional santa fe.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,9 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^5.5.2",
     "express": "^4.18.2"
   },
   "devDependencies": {
-    "prisma": "^5.4.2"
+    "prisma": "^5.5.2"
   }
 }
